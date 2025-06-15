@@ -1,0 +1,30 @@
+name: CI - MLflow Model Training
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: pendidikan_env
+        environment-file: MLProject/conda.yaml
+        auto-activate-base: false
+
+    - name: Install MLflow
+      run: |
+        pip install mlflow
+
+    - name: Run MLflow Project
+      run: |
+        cd MLProject
+        mlflow run . -P n_estimators=150
